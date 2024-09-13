@@ -14,11 +14,15 @@ def read_counter():
     Returns:
         int: The current counter value.
     """
-    if os.path.exists(COUNTER_FILE):
-        with open(COUNTER_FILE, "r") as f:
-            return int(f.read().strip())
-    else:
-        return 0
+    try:
+        if os.path.exists(COUNTER_FILE):
+            with open(COUNTER_FILE, "r") as f:
+                return int(f.read().strip())
+        else:
+            return 0
+    except Exception as e:
+        print(f"Error reading counter: {e}")
+        return None
 
 def update_counter(counter):
     """
@@ -27,8 +31,11 @@ def update_counter(counter):
     Args:
         counter (int): The new counter value to write to the file.
     """
-    with open(COUNTER_FILE, "w") as f:
-        f.write(str(counter))
+    try:
+        with open(COUNTER_FILE, "w") as f:
+            f.write(str(counter))
+    except Exception as e:
+        print(f"Error writing counter: {e}")
 
 @app.route('/', methods=['GET', 'POST'])
 def handle_request():
@@ -41,6 +48,9 @@ def handle_request():
         str: The response message with the current or updated counter.
     """
     counter = read_counter()
+    if counter is None:
+        return "Error reading counter", 500
+
     if request.method == 'POST':
         # Increment the counter for each POST request and update the file.
         counter += 1
