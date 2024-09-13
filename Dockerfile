@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 ARG PYTHON_VERSION=3.13.0a4
-FROM python:${PYTHON_VERSION}-alpine3.19.4 as base
+FROM python:${PYTHON_VERSION}-alpine3.19 as base
 
 # Prevents Python from writing pyc files.
 ENV PYTHONDONTWRITEBYTECODE=1
